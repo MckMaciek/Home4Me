@@ -1,0 +1,9 @@
+server:
+    port: 8080
+    
+zuul:
+  sensitiveHeaders: Cookie,Set-Cookie
+  routes:
+    security:
+      path: /security/**
+      url: http://localhost:8081/security/api

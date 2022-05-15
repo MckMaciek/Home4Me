@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>	
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+		http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.9.xsd">
+
+    <changeSet  id="1.0"  author="Maciej">  
+        <createTable  tableName="loginDetails">     
+            <column name="id"  type="bigint"  autoIncrement="true">  
+                <constraints  primaryKey="true"  nullable="false"/>  
+            </column>  
+            <column name="username"  type="varchar(50)">
+            	<constraints  nullable="false"/>
+           	</column>	  
+            <column name="password"  type="varchar(50)">  
+                <constraints  nullable="false"/>  
+            </column>
+            <column name="email"  type="varchar(50)">  
+                <constraints  nullable="false"/>  
+            </column>  
+            <column name="creationDate"  type="datetime">  
+                <constraints  nullable="false"/>  
+            </column>  
+            <column name="isUserEnabled"  type="boolean">
+            	<constraints  nullable="false"/>
+           	</column>
+           	<column name="isUserNonLocked"  type="boolean">
+            	<constraints  nullable="false"/>
+           	</column>	
+           	<column name="isUserAccountNonExpired"  type="boolean">
+            	<constraints  nullable="false"/>
+           	</column>
+           	<column name="isUserCredentialsNonExpired"  type="boolean">
+            	<constraints  nullable="false"/>
+           	</column>
+           	<column name="roles_id" type="bigint">
+           		<constraints nullable="true"/>
+      		</column>   	
+        </createTable>
+        
+        <createTable tableName="roles">
+        	<column name="id" type="bigint" autoIncrement="true">
+            	<constraints primaryKey="true" nullable="false"/>
+        	</column>
+        	<column name="roles" type="varchar(255)">
+            	<constraints nullable="false" />
+        	</column>
+    	</createTable>
+        
+        <addForeignKeyConstraint baseColumnNames="roles_id"
+                             baseTableName="loginDetails"
+                             constraintName="fk_roles_id"
+                             referencedColumnNames="id"
+                             referencedTableName="roles"/>
+          
+    </changeSet>  
+</databaseChangeLog>
