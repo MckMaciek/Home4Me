@@ -12,7 +12,9 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -27,15 +29,23 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
 @Data
 @Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+@Table(name = "loginDetails")
+@NamedQueries({
+	@NamedQuery(name = LoginDetails.GET_BY_USERNAME, query = "from LoginDetails ld where username = :inputUsername")
+})
+@SuppressWarnings("serial")
 public class LoginDetails implements UserDetails {
 
+	
+	public static final String GET_BY_USERNAME = "LoginDetails.GET_BY_USERNAME";
 	private static final String ROLE_PREFIX = "ROLE_";
 	
 	public static final boolean IS_ENABLED_BY_DEFAULT = true;

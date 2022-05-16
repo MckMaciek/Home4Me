@@ -1,4 +1,4 @@
-package io.home4Me.Security.authentication.config;
+package io.home4Me.Security.utils;
 
 import java.util.Date;
 
@@ -36,6 +36,7 @@ public class JwtUtils {
     }
 	
    public String getUserNameFromJwtToken(String token) {
+	   
 	   return Jwts.parser()
 			.setSigningKey(jwtSecret)
 			.parseClaimsJws(token)

@@ -15,13 +15,13 @@
                 <constraints  primaryKey="true"  nullable="false"/>  
             </column>  
             <column name="username"  type="varchar(50)">
-            	<constraints  nullable="false"/>
+            	<constraints  nullable="false" unique="true"/>
            	</column>	  
             <column name="password"  type="varchar(50)">  
                 <constraints  nullable="false"/>  
             </column>
             <column name="email"  type="varchar(50)">  
-                <constraints  nullable="false"/>  
+                <constraints  nullable="false" unique="true"/>  
             </column>  
             <column name="creationDate"  type="datetime">  
                 <constraints  nullable="false"/>  
@@ -42,6 +42,14 @@
            		<constraints nullable="true"/>
       		</column>   	
         </createTable>
+        
+        <createIndex indexName="username_index" tableName="loginDetails">
+    		<column name="username"/>
+  		</createIndex>
+  		
+  		<createIndex indexName="email_index" tableName="loginDetails">
+    		<column name="email"/>
+  		</createIndex>
         
         <createTable tableName="roles">
         	<column name="id" type="bigint" autoIncrement="true">
