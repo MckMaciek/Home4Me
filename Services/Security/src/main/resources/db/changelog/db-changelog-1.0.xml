@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>	
+<?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
 	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -9,62 +9,74 @@
 		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
 		http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.9.xsd">
 
-    <changeSet  id="1.0"  author="Maciej">  
-        <createTable  tableName="loginDetails">     
-            <column name="id"  type="bigint"  autoIncrement="true">  
-                <constraints  primaryKey="true"  nullable="false"/>  
-            </column>  
-            <column name="username"  type="varchar(50)">
-            	<constraints  nullable="false" unique="true"/>
-           	</column>	  
-            <column name="password"  type="varchar(50)">  
-                <constraints  nullable="false"/>  
-            </column>
-            <column name="email"  type="varchar(50)">  
-                <constraints  nullable="false" unique="true"/>  
-            </column>  
-            <column name="creationDate"  type="datetime">  
-                <constraints  nullable="false"/>  
-            </column>  
-            <column name="isUserEnabled"  type="boolean">
-            	<constraints  nullable="false"/>
-           	</column>
-           	<column name="isUserNonLocked"  type="boolean">
-            	<constraints  nullable="false"/>
-           	</column>	
-           	<column name="isUserAccountNonExpired"  type="boolean">
-            	<constraints  nullable="false"/>
-           	</column>
-           	<column name="isUserCredentialsNonExpired"  type="boolean">
-            	<constraints  nullable="false"/>
-           	</column>
-           	<column name="roles_id" type="bigint">
-           		<constraints nullable="true"/>
-      		</column>   	
-        </createTable>
-        
-        <createIndex indexName="username_index" tableName="loginDetails">
-    		<column name="username"/>
-  		</createIndex>
-  		
-  		<createIndex indexName="email_index" tableName="loginDetails">
-    		<column name="email"/>
-  		</createIndex>
-        
-        <createTable tableName="roles">
-        	<column name="id" type="bigint" autoIncrement="true">
-            	<constraints primaryKey="true" nullable="false"/>
-        	</column>
-        	<column name="roles" type="varchar(255)">
-            	<constraints nullable="false" />
-        	</column>
-    	</createTable>
-        
-        <addForeignKeyConstraint baseColumnNames="roles_id"
-                             baseTableName="loginDetails"
-                             constraintName="fk_roles_id"
-                             referencedColumnNames="id"
-                             referencedTableName="roles"/>
-          
-    </changeSet>  
+	<changeSet id="1.0" author="Maciej">
+		<createTable tableName="login_details">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="username" type="varchar(50)">
+				<constraints nullable="false" unique="true" />
+			</column>
+			<column name="password" type="varchar(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="email" type="varchar(50)">
+				<constraints nullable="false" unique="true" />
+			</column>
+			<column name="creation_date" type="datetime">
+				<constraints nullable="false" />
+			</column>
+			<column name="is_user_enabled" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="is_user_non_locked" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="is_user_account_non_expired" type="boolean">
+				<constraints nullable="false" />
+			</column>
+			<column name="is_user_credentials_non_expired" type="boolean">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createIndex indexName="username_index"
+			tableName="login_details">
+			<column name="username" />
+		</createIndex>
+
+		<createIndex indexName="email_index"
+			tableName="login_details">
+			<column name="email" />
+		</createIndex>
+
+		<createTable tableName="user_roles">
+			<column name="id" type="bigint">
+				<constraints primaryKey="true" nullable="false" unique="true" />
+			</column>
+			<column name="role" type="varchar(255)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createTable tableName="login_details_user_roles">
+			<column name="login_details_id" type="bigint">
+				<constraints primaryKey="true" nullable="true" />
+			</column>
+			<column name="roles_id" type="bigint">
+				<constraints primaryKey="true" nullable="true" />
+			</column>
+		</createTable>
+
+		<addForeignKeyConstraint
+			baseTableName="login_details_user_roles"
+			baseColumnNames="login_details_id" constraintName="fk_login_details"
+			referencedTableName="login_details" referencedColumnNames="id" />
+
+		<addForeignKeyConstraint
+			baseTableName="login_details_user_roles" baseColumnNames="roles_id"
+			constraintName="fk_roles" referencedTableName="user_roles"
+			referencedColumnNames="id" />
+
+	</changeSet>
 </databaseChangeLog>

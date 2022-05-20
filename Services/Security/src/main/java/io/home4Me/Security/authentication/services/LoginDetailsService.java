@@ -1,20 +1,28 @@
 package io.home4Me.Security.authentication.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Supplier;
+
+import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import io.home4Me.Security.RoleTypes;
 import io.home4Me.Security.VerificationInfo;
 import io.home4Me.Security.authentication.dao.LoginDetailsDao;
+import io.home4Me.Security.authentication.dto.LoginDetailsDto;
 import io.home4Me.Security.authentication.entity.LoginDetails;
 
 @Service
@@ -24,12 +32,30 @@ public class LoginDetailsService implements UserDetailsService {
 	
 	private final LoginDetailsDao loginDetailsDao;
 	private final PasswordEncoder passwordEncoder;
-	
+	private final RoleService roleService;
+		
 	@Autowired
 	public LoginDetailsService(LoginDetailsDao loginDetailsDao,
-			PasswordEncoder passwordEncoder) {
+			@Lazy PasswordEncoder passwordEncoder,
+			RoleService roleService
+	){
 		this.loginDetailsDao = loginDetailsDao;
 		this.passwordEncoder = passwordEncoder;
+		this.roleService = roleService;
+	}
+	
+	public LoginDetails createUser(LoginDetailsDto loginDetailsDTO, Set<RoleTypes> roleTypes) {
+		
+		ModelMapper modelMapper = new ModelMapper();
+		LoginDetails loginDetails = modelMapper.map(loginDetailsDTO, LoginDetails.class);
+		
+		loginDetails.setId(null);
+		loginDetails.setCreationDate(LocalDateTime.now());
+			
+		saveEntity(loginDetails);
+		roleService.overrideUserRoles(loginDetails, roleTypes);
+		
+		return loginDetails;
 	}
 	
 	@Override
@@ -39,6 +65,7 @@ public class LoginDetailsService implements UserDetailsService {
 		return loginDetailsOpt.orElseThrow(logAndThrowNotFoundExc(username));
 	}
 	
+	@Transactional
 	public void saveEntity(LoginDetails loginDetails) {
 		
 		Optional<VerificationInfo> foundFailure = VerificationInfo.findFailures(prePersistValidation(loginDetails));

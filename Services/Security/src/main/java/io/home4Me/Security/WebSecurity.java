@@ -7,10 +7,12 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import io.home4Me.Security.authentication.filters.JwtFilter;
 import io.home4Me.Security.authentication.services.LoginDetailsService;
 
+@Component
 public class WebSecurity extends WebSecurityConfigurerAdapter  {
 
 	private final LoginDetailsService loginDetailsService;

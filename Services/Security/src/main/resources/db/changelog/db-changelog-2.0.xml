@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+		http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.9.xsd">
+
+	<changeSet id="2.0" author="Maciej">
+
+		<insert tableName="user_roles">
+			<column name="id" value="1" />
+			<column name="role" value="ADMIN" />
+		</insert>
+		<insert tableName="user_roles">
+			<column name="id" value="2" />
+			<column name="role" value="USER" />
+		</insert>
+		<insert tableName="user_roles">
+			<column name="id" value="3" />
+			<column name="role" value="LESSEE" />
+		</insert>
+		<insert tableName="user_roles">
+			<column name="id" value="4" />
+			<column name="role" value="SUPERVISOR" />
+		</insert>
+		<insert tableName="user_roles">
+			<column name="id" value="5" />
+			<column name="role" value="TENANT" />
+		</insert>
+
+	</changeSet>
+</databaseChangeLog>
