@@ -38,13 +38,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @NamedQueries({
-	@NamedQuery(name = LoginDetails.GET_BY_USERNAME, query = "from LoginDetails ld where username = :inputUsername")
+	@NamedQuery(name = LoginDetails.GET_BY_USERNAME, query = "from LoginDetails ld where username = :inputUsername"),
+	@NamedQuery(name = LoginDetails.GET_ALL, query = "from LoginDetails")
 })
 @SuppressWarnings("serial")
 @Table(name = "login_details", schema = "public")
 public class LoginDetails implements UserDetails {
 
 	public static final String GET_BY_USERNAME = "LoginDetails.GET_BY_USERNAME";
+	public static final String GET_ALL = "LoginDetails.GET_ALL";
 	private static final String ROLE_PREFIX = "ROLE_";
 	
 	public static final boolean IS_ENABLED_BY_DEFAULT = true;

@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import io.home4Me.Security.RoleTypes;
+import io.home4Me.Security.authentication.dao.RolesDao;
 import io.home4Me.Security.authentication.entity.LoginDetails;
 import io.home4Me.Security.authentication.entity.UserRoles;
 
@@ -23,9 +24,11 @@ public class RoleService {
 	
 	private static final Logger logger = LogManager.getLogger(RoleService.class);
 
-	@PersistenceContext
-	private EntityManager em;
+	private final RolesDao rolesDao;
 	
+	public RoleService(RolesDao rolesDao) {
+		this.rolesDao = rolesDao;
+	}
 	
 	public void addUserRoles(LoginDetails loginDetails, Set<RoleTypes> desiredRoles) {
 		if(!validateEntityAndRoles(loginDetails, desiredRoles)) throw new NullPointerException("Null value or empty list provided");
@@ -51,8 +54,7 @@ public class RoleService {
 	
 	private void updateUserFetchedRoles(LoginDetails loginDetails, Set<RoleTypes> desiredRoles) {
 		
-		List<UserRoles> allRolesInSystem = em.createNamedQuery(UserRoles.GET_ALL, UserRoles.class)
-	  										 .getResultList();
+		List<UserRoles> allRolesInSystem = rolesDao.findAll();
 		
 		intersectWithDatabaseValues(allRolesInSystem, desiredRoles).forEach(desiredRole -> {
 				Optional<UserRoles> userRoleOpt = allRolesInSystem
