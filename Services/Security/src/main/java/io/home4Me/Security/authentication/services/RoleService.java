@@ -12,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.home4Me.Security.RoleTypes;
@@ -26,6 +27,7 @@ public class RoleService {
 
 	private final RolesDao rolesDao;
 	
+	@Autowired
 	public RoleService(RolesDao rolesDao) {
 		this.rolesDao = rolesDao;
 	}
@@ -42,7 +44,6 @@ public class RoleService {
 		if(!validateEntityAndRoles(loginDetails, desiredRoles)) throw new NullPointerException("Null value or empty list provided");
 	
 		loginDetails.setUserRoles(new HashSet<>());
-		
 		updateUserFetchedRoles(loginDetails, desiredRoles);
 		
 		logger.debug(String.format("For user with the id of %s - roles has been overrided %s", loginDetails.getId(), catRoles(desiredRoles)));

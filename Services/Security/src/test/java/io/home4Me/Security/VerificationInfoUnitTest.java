@@ -24,7 +24,7 @@ public class VerificationInfoUnitTest {
 		assertThat(v1.getReason()).isEqualTo(StringUtils.EMPTY);
 		assertThat(v3.getReason()).isEqualTo(StringUtils.EMPTY);
 		
-		Optional<VerificationInfo> failed = VerificationInfo.findFailures(List.of(v1,v2,v3));
+		Optional<VerificationInfo> failed = VerificationInfo.findAnyFailure(List.of(v1,v2,v3));
 		
 		assertThat(failed).isPresent();
 		VerificationInfo verificationInfoThatFailed = failed.get();

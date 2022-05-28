@@ -6,16 +6,15 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
@@ -82,7 +81,7 @@ public class LoginDetails implements UserDetails {
 	private boolean isUserCredentialsNonExpired = IS_CREDS_NON_EXPIRED_BY_DEFAULT;
 	
 	@Builder.Default
-	@OneToMany(cascade = {CascadeType.PERSIST})
+	@ManyToMany
 	@JoinTable(joinColumns = { @JoinColumn(name = "login_details_id", table = "login_details_roles")},
 				inverseJoinColumns = { @JoinColumn(name = "roles_id", table = "login_details_roles")}
 			)

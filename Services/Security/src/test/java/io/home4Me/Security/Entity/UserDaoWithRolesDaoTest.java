@@ -144,6 +144,7 @@ public class UserDaoWithRolesDaoTest {
 		
 		List<LoginDetails> allUsers = loginDetailsDao.findAll();
 		assertThat(allUsers).isNotEmpty();
+		assertThat(allUsers).hasSize(2);
 		
 		LoginDetails foundUser1 = loginDetailsDao.getLoginDetailsByUsername(USER1_USERNAME);
 		LoginDetails foundUser2 = loginDetailsDao.getLoginDetailsByUsername(USER2_USERNAME);

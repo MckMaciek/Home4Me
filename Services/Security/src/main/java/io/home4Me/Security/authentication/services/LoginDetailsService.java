@@ -44,6 +44,7 @@ public class LoginDetailsService implements UserDetailsService {
 		this.roleService = roleService;
 	}
 	
+	@Transactional
 	public LoginDetails createUser(LoginDetailsDto loginDetailsDTO, Set<RoleTypes> roleTypes) {
 		
 		ModelMapper modelMapper = new ModelMapper();
@@ -65,10 +66,9 @@ public class LoginDetailsService implements UserDetailsService {
 		return loginDetailsOpt.orElseThrow(logAndThrowNotFoundExc(username));
 	}
 	
-	@Transactional
 	public void saveEntity(LoginDetails loginDetails) {
 		
-		Optional<VerificationInfo> foundFailure = VerificationInfo.findFailures(prePersistValidation(loginDetails));
+		Optional<VerificationInfo> foundFailure = VerificationInfo.findAnyFailure(prePersistValidation(loginDetails));
 		
 		if (foundFailure.isEmpty()) {
 			encodePassword(loginDetails);

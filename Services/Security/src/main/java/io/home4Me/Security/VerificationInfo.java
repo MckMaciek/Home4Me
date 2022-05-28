@@ -27,7 +27,7 @@ public class VerificationInfo {
 		return this;
 	}
 	
-	public static Optional<VerificationInfo> findFailures(List<VerificationInfo> infos){
+	public static Optional<VerificationInfo> findAnyFailure(List<VerificationInfo> infos){
 		return infos.stream()
 				.filter(vInfo -> !vInfo.isVerified())
 				.findAny();
