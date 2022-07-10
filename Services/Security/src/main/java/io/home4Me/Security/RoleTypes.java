@@ -24,4 +24,5 @@ public enum RoleTypes {
         		.filter(role -> role.getId() == id)
         		.findFirst();
     }
+
 }

@@ -1,37 +1,15 @@
 package io.home4Me.Security.authentication.dao;
 
-import java.util.List;
+import java.util.Optional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import io.home4Me.Security.authentication.entity.LoginDetails;
 
 @Repository
-public class LoginDetailsDao {
+public interface LoginDetailsDao extends JpaRepository<LoginDetails, Long> {
 
-	@PersistenceContext
-	private final EntityManager em;
-	
-	public LoginDetailsDao(EntityManager em) {
-		this.em = em;
-	}
-	
-	public LoginDetails getLoginDetailsByUsername(String username) {
-		return em.createNamedQuery(LoginDetails.GET_BY_USERNAME, LoginDetails.class)
-				.setParameter("inputUsername", username)
-				.getSingleResult();
-	}
-	
-	public List<LoginDetails> findAll(){
-		return em.createNamedQuery(LoginDetails.GET_ALL, LoginDetails.class)
-				.getResultList();
-	}
-
-	public void save(LoginDetails loginDetails) {
-		em.persist(loginDetails);
-	}
-	
+	Optional<LoginDetails> findByUsername(String inputUsername);
+	boolean existsByUsernameOrEmail(String username, String email);
 }

@@ -4,11 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.home4Me.Security.RoleTypes;
 import io.home4Me.Security.authentication.dao.LoginDetailsDao;
@@ -37,12 +36,13 @@ import io.home4Me.Security.authentication.services.RoleService;
 public class UserDaoWithRolesDaoTest {
 
 	@Autowired
-	private EntityManager em;
-	
 	private LoginDetailsDao loginDetailsDao;
-	private RoleService roleService;
+	
+	@Autowired
 	private RolesDao roleDao;
 	
+	private RoleService roleService;
+
 	private static final String USER1_EMAIL = "test@gmail.com";
 	private static final String USER1_USERNAME = "testUsername";
 	private static final String USER1_PASSWORD = "testPassword";
@@ -63,8 +63,6 @@ public class UserDaoWithRolesDaoTest {
 	
 	@Before
 	public void setUp() {	
-		this.loginDetailsDao = new LoginDetailsDao(em);
-		this.roleDao = new RolesDao(em);
 		this.roleService = new RoleService(roleDao);
 	}
 	
@@ -121,8 +119,8 @@ public class UserDaoWithRolesDaoTest {
 
 	public void canDeleteTheseUsers() {
 			
-		em.remove(firstUser);
-		em.remove(secondUser);
+		loginDetailsDao.delete(firstUser);
+		loginDetailsDao.delete(secondUser);
 		
 		List<LoginDetails> shouldBeEmpty = loginDetailsDao.findAll();
 		assertThat(shouldBeEmpty).isEmpty();
@@ -133,9 +131,15 @@ public class UserDaoWithRolesDaoTest {
 		roleService.overrideUserRoles(firstUser, Set.of(firstUserOverridedRole));
 		roleService.overrideUserRoles(secondUser, Set.of(secondUserOverridedRole));
 		
-		LoginDetails overridenUser1 = loginDetailsDao.getLoginDetailsByUsername(USER1_USERNAME);
-		LoginDetails overridenUser2 = loginDetailsDao.getLoginDetailsByUsername(USER2_USERNAME);
+		Optional<LoginDetails> overridenUser1Opt = loginDetailsDao.findByUsername(USER1_USERNAME);
+		Optional<LoginDetails> overridenUser2Opt = loginDetailsDao.findByUsername(USER2_USERNAME);
 		
+		assertThat(overridenUser1Opt).isPresent();
+		assertThat(overridenUser2Opt).isPresent();
+		
+		LoginDetails overridenUser1 = overridenUser1Opt.get();
+		LoginDetails overridenUser2 = overridenUser2Opt.get();
+
 		assertUserRoles(overridenUser1.getUserRoles(), Set.of(firstUserOverridedRole));
 		assertUserRoles(overridenUser2.getUserRoles(), Set.of(secondUserOverridedRole));
 	}
@@ -146,14 +150,20 @@ public class UserDaoWithRolesDaoTest {
 		assertThat(allUsers).isNotEmpty();
 		assertThat(allUsers).hasSize(2);
 		
-		LoginDetails foundUser1 = loginDetailsDao.getLoginDetailsByUsername(USER1_USERNAME);
-		LoginDetails foundUser2 = loginDetailsDao.getLoginDetailsByUsername(USER2_USERNAME);
+		Optional<LoginDetails> foundUser1Opt = loginDetailsDao.findByUsername(USER1_USERNAME);
+		Optional<LoginDetails> foundUser2Opt = loginDetailsDao.findByUsername(USER2_USERNAME);
 		
-		assertUsers(foundUser1, firstUser, firstUserRoles);
-		assertUsers(foundUser2, secondUser, secondUserRoles);
+		assertThat(foundUser1Opt).isPresent();
+		assertThat(foundUser2Opt).isPresent();
 		
-		this.firstUser = foundUser1;
-		this.secondUser = foundUser2;
+		LoginDetails overridenUser1 = foundUser1Opt.get();
+		LoginDetails overridenUser2 = foundUser2Opt.get();
+		
+		assertUsers(overridenUser1, firstUser, firstUserRoles);
+		assertUsers(overridenUser2, secondUser, secondUserRoles);
+		
+		this.firstUser = overridenUser1;
+		this.secondUser = overridenUser2;
 	}
 	
 	public void assertUsers(LoginDetails foundUser, LoginDetails actualUser, Set<RoleTypes> actualRoles) {

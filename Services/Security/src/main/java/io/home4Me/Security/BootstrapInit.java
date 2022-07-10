@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import io.home4Me.Security.authentication.dto.LoginDetailsDto;
+import io.home4Me.Security.authentication.dto.RegisterRequest;
 import io.home4Me.Security.authentication.entity.LoginDetails;
 import io.home4Me.Security.authentication.services.LoginDetailsService;
 
@@ -24,7 +25,7 @@ public class BootstrapInit implements CommandLineRunner {
 
 		LoginDetails anyUser = loginDetailsService
 				.createUser(
-						LoginDetailsDto.builder().email("test@gmail.com").username("anyUsername")
+						RegisterRequest.builder().email("test@gmail.com").username("anyUsername")
 								.password("anyPassword").build(),
 						Set.of(RoleTypes.ADMIN, RoleTypes.USER, RoleTypes.LESSEE, RoleTypes.SUPERVISOR)
 		);

@@ -12,20 +12,17 @@ import io.home4Me.Security.RoleTypes;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@NamedQueries({
-	@NamedQuery(name = UserRoles.GET_ALL, query = "from UserRoles ur")
-})
+@EqualsAndHashCode(of = {"id", "role"})
 @Entity
 @Table(name = "user_roles", schema = "public")
 public class UserRoles {
-	
-	public static final String GET_ALL = "UserRoles.GET_ALL";
 	
 	@Id
     private Long id;

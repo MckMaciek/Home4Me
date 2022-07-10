@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import io.home4Me.Security.VerificationInfo;
 import io.home4Me.Security.authentication.dto.LoginRequest;
+import io.home4Me.Security.authentication.entity.LoginDetails;
 import io.home4Me.Security.utils.TokenSupplier;
 import io.home4Me.Security.utils.TokenWrappee;
 
@@ -19,36 +20,38 @@ import io.home4Me.Security.utils.TokenWrappee;
 public class JwtService {
 
 	private final TokenSupplier jwtSupplier;
-	private final AuthenticationManager authenticationManager;
 	
 	@Autowired
-	public JwtService(TokenSupplier jwtSupplier,
-			AuthenticationManager authenticationManager
-	){
+	public JwtService(TokenSupplier jwtSupplier){
 		this.jwtSupplier = jwtSupplier;
-		this.authenticationManager = authenticationManager;
 	}
 	
-	public TokenWrappee provideRefreshAndAccessToken(LoginRequest loginRequest) {
-		
-		Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        UserDetails loginDetails = (UserDetails) authentication.getDetails();
-		
+	public TokenWrappee provideRefreshAndAccessToken(UserDetails userDetails) {
+			
 		TokenWrappee tokens = jwtSupplier.buildOperation()
 										 .generateBothTokens()
-										 .withUserDetails(loginDetails)
+										 .withUserDetails(userDetails)
 										 .build();
-		
+		validateTokens(tokens);
+		return tokens;
+	}
+	
+	public TokenWrappee provideAccessToken(String refreshToken, UserDetails userDetails) {
+		TokenWrappee accessTokenWrappee = jwtSupplier.buildOperation()
+													 .getNewAccessToken()
+													 .withRefreshToken(refreshToken)
+													 .withUserDetails(userDetails)
+													 .build();
+		validateTokens(accessTokenWrappee);
+		return accessTokenWrappee;
+	}
+	
+	private void validateTokens(TokenWrappee tokens) {
 		Optional<VerificationInfo> validationFailures = VerificationInfo.findAnyFailure(tokens.getValidationInfo());
 		
 		if(validationFailures.isPresent()) {
 			throw new NullPointerException(validationFailures.get().getReason());
 		}
-		
-		return tokens;
 	}
 	
 }
