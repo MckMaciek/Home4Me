@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.home4Me.Security.RoleTypes;
 import io.home4Me.Security.authentication.dao.RolesDao;
@@ -32,6 +33,7 @@ public class RoleService {
 		this.rolesDao = rolesDao;
 	}
 	
+	@Transactional
 	public void addUserRoles(LoginDetails loginDetails, Set<RoleTypes> desiredRoles) {
 		if(!validateEntityAndRoles(loginDetails, desiredRoles)) throw new NullPointerException("Null value or empty list provided");
 		
@@ -40,6 +42,7 @@ public class RoleService {
 		logger.debug(String.format("For user with the id of %s - roles has been provided %s", loginDetails.getId(), catRoles(desiredRoles)));
 	}
 	
+	@Transactional
 	public void overrideUserRoles(LoginDetails loginDetails, Set<RoleTypes> desiredRoles) {
 		if(!validateEntityAndRoles(loginDetails, desiredRoles)) throw new NullPointerException("Null value or empty list provided");
 	

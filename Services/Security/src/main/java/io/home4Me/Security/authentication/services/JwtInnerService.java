@@ -17,17 +17,16 @@ import io.home4Me.Security.utils.TokenSupplier;
 import io.home4Me.Security.utils.TokenWrappee;
 
 @Service
-public class JwtService {
+public class JwtInnerService {
 
 	private final TokenSupplier jwtSupplier;
 	
 	@Autowired
-	public JwtService(TokenSupplier jwtSupplier){
+	public JwtInnerService(TokenSupplier jwtSupplier){
 		this.jwtSupplier = jwtSupplier;
 	}
 	
-	public TokenWrappee provideRefreshAndAccessToken(UserDetails userDetails) {
-			
+	public TokenWrappee provideRefreshAndAccessToken(UserDetails userDetails) {	
 		TokenWrappee tokens = jwtSupplier.buildOperation()
 										 .generateBothTokens()
 										 .withUserDetails(userDetails)

@@ -19,6 +19,7 @@ import io.home4Me.Security.RoleTypes;
 import io.home4Me.Security.authentication.dto.LoginRequest;
 import io.home4Me.Security.authentication.dto.LoginResponse;
 import io.home4Me.Security.authentication.dto.RegisterRequest;
+import io.home4Me.Security.authentication.services.JwtAuthenticationService;
 import io.home4Me.Security.authentication.services.LoginDetailsService;
 
 import static io.home4Me.Security.Access.ROLE_USER;
@@ -27,28 +28,29 @@ import static io.home4Me.Security.Access.ROLE_USER;
 @RequestMapping("/api/auth")
 public class AuthBoundary {
 	
-	private LoginDetailsService loginService;
+	private final LoginDetailsService loginService;
+	private final JwtAuthenticationService jwtService;
 	
 	@Autowired
-	public AuthBoundary(LoginDetailsService loginService){
+	public AuthBoundary(LoginDetailsService loginService, JwtAuthenticationService jwtService){
 		this.loginService = loginService;
+		this.jwtService = jwtService;
 	}
 		
 	@PostMapping("/register")
 	public ResponseEntity<LocalDateTime> registerNewUser(@Valid @RequestBody RegisterRequest registerRequest){
-		return ResponseEntity.ok(loginService.createUser(registerRequest, Set.of(RoleTypes.USER))
-											 .getCreationDate());
+		return ResponseEntity.ok(loginService.createUser(registerRequest).getCreationDate());
 	}
 	
 	@PostMapping("/login")
 	public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest){
-		return ResponseEntity.ok(loginService.authenticateAndProvideTokens(loginRequest));
+		return ResponseEntity.ok(jwtService.authenticateAndProvideTokens(loginRequest));
 	}
 	
 	@PreAuthorize(ROLE_USER)
 	@GetMapping("/refreshAccessToken")
 	public ResponseEntity<LoginResponse> renewAccessToken(@NotBlank @RequestBody String refreshToken){
-		return ResponseEntity.ok(loginService.refreshAuthenticatedAccessToken(refreshToken));
+		return ResponseEntity.ok(jwtService.refreshAuthenticatedAccessToken(refreshToken));
 	}
 	
 }

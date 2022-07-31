@@ -26,8 +26,7 @@ public class BootstrapInit implements CommandLineRunner {
 		LoginDetails anyUser = loginDetailsService
 				.createUser(
 						RegisterRequest.builder().email("test@gmail.com").username("anyUsername")
-								.password("anyPassword").build(),
-						Set.of(RoleTypes.ADMIN, RoleTypes.USER, RoleTypes.LESSEE, RoleTypes.SUPERVISOR)
+								.password("anyPassword").build()
 		);
 
 	}

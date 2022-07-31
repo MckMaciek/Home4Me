@@ -3,6 +3,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,25 +28,33 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.data.domain.AfterDomainEventPublication;
 import org.springframework.data.domain.DomainEvents;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import io.home4Me.Security.Events.LogUserCreated;
+import io.home4Me.Security.RoleTypes;
+import io.home4Me.Security.Events.LogUserCreatedEvent;
 import io.home4Me.Security.authentication.dto.LoginDetailsDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
+
 
 @Entity
 @Builder
-@Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(exclude = {"password"})
@@ -106,15 +115,16 @@ public class LoginDetails extends AbstractAggregateRoot<LoginDetails> implements
 			 .collect(Collectors.toList());
 	}
 	
-	public LoginDetails buildNewUser() {
-		this.setId(null);
-		this.setCreationDate(LocalDateTime.now());
+	public LoginDetails buildNewUser(Set<RoleTypes> userRoles) {
+		this.id = null;
+		this.creationDate = LocalDateTime.now();
 		
-		registerEvent(new LogUserCreated(this, this));
+		registerEvent(new RolesAssigneEvent(this, this, userRoles));
+		registerEvent(new LogUserCreatedEvent(this, this));
 		
 		return this;
 	}
-
+	
 	@Override
 	public String getUsername() {
 		return username;
@@ -143,5 +153,45 @@ public class LoginDetails extends AbstractAggregateRoot<LoginDetails> implements
 	@Override
 	public boolean isEnabled() {
 		return isUserEnabled;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setCreationDate(LocalDateTime creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public void setUserEnabled(boolean isUserEnabled) {
+		this.isUserEnabled = isUserEnabled;
+	}
+
+	public void setUserNonLocked(boolean isUserNonLocked) {
+		this.isUserNonLocked = isUserNonLocked;
+	}
+
+	public void setUserAccountNonExpired(boolean isUserAccountNonExpired) {
+		this.isUserAccountNonExpired = isUserAccountNonExpired;
+	}
+
+	public void setUserCredentialsNonExpired(boolean isUserCredentialsNonExpired) {
+		this.isUserCredentialsNonExpired = isUserCredentialsNonExpired;
+	}
+
+	public void setUserRoles(Set<UserRoles> userRoles) {
+		this.userRoles = userRoles;
 	}
 }

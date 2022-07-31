@@ -8,22 +8,22 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-import io.home4Me.Security.Events.LogUserCreated;
+import io.home4Me.Security.Events.LogUserCreatedEvent;
 import io.home4Me.Security.authentication.dto.LoginDetailsDto;
 
 @Component
-public class LogUserCreatedEventListener implements ApplicationListener<LogUserCreated> {
+public class LogUserCreatedEventListener implements ApplicationListener<LogUserCreatedEvent> {
 
 	private static final Logger logger = LogManager.getLogger(LogUserCreatedEventListener.class);
 	
-	@Override
 	@Async
+	@Override
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-	public void onApplicationEvent(LogUserCreated event) {
-		logger.info(formatUserLog(event));
+	public void onApplicationEvent(LogUserCreatedEvent event) {
+		logger.debug(formatUserLog(event));
 	}
 	
-	private String formatUserLog(LogUserCreated event) {
+	private String formatUserLog(LogUserCreatedEvent event) {
 		return String.format("%s - NEW-USER-INSERTED - %s, ", event.getTimestamp(), event.getDetails());
 	}
 
