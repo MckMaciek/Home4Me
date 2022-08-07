@@ -27,6 +27,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -89,7 +91,7 @@ public class LoginDetails extends AbstractAggregateRoot<LoginDetails> implements
 	@Email
 	private String email;
 	
-	@NotNull
+	@Generated(GenerationTime.INSERT)
 	private LocalDateTime creationDate;
 	
 	@Builder.Default
@@ -117,7 +119,6 @@ public class LoginDetails extends AbstractAggregateRoot<LoginDetails> implements
 	
 	public LoginDetails buildNewUser(Set<RoleTypes> userRoles) {
 		this.id = null;
-		this.creationDate = LocalDateTime.now();
 		
 		registerEvent(new RolesAssigneEvent(this, this, userRoles));
 		registerEvent(new LogUserCreatedEvent(this, this));

@@ -19,7 +19,9 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import io.home4Me.Security.RoleTypes;
 import io.home4Me.Security.VerificationInfo;
+import io.home4Me.Security.utils.AccessToken;
 import io.home4Me.Security.utils.JwtUtils;
+import io.home4Me.Security.utils.RefreshToken;
 import io.home4Me.Security.utils.TokenSupplier;
 import io.home4Me.Security.utils.TokenWrappee;
 
@@ -58,14 +60,14 @@ public class TokenSupplierTest {
 		String accessToken = generatedTokens.getAccessToken();
 		String refreshToken = generatedTokens.getRefreshToken();
 		
-		String decodedAccessTokenUsername = jwtUtils.getUserNameFromAccessToken(accessToken);
-		String decodedRefreshTokenUsername = jwtUtils.getUserNameFromRefreshToken(refreshToken, accessToken);
+		AccessToken accessTokenWrapped = jwtUtils.wrapToken(accessToken);
+		RefreshToken refreshTokenWrapped  = jwtUtils.wrapToken(refreshToken, accessToken);
 		
-		assertThat(decodedAccessTokenUsername).isNotBlank();
-		assertThat(decodedRefreshTokenUsername).isNotBlank();
+		assertThat(accessTokenWrapped.getUsername()).isNotBlank();
+		assertThat(refreshTokenWrapped.getUsername()).isNotBlank();
 		
-		assertThat(decodedAccessTokenUsername).isEqualTo(decodedAccessTokenUsername);
-		assertThat(decodedAccessTokenUsername).isEqualTo(USERNAME);
+		assertThat(accessTokenWrapped.getUsername()).isEqualTo(accessTokenWrapped.getUsername());
+		assertThat(accessTokenWrapped.getUsername()).isEqualTo(USERNAME);
 	}
 
 	

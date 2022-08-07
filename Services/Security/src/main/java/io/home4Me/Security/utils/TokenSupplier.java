@@ -5,6 +5,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import io.home4Me.Security.Exceptions.InvalidAccessTokenException;
+import io.home4Me.Security.Exceptions.InvalidRefreshTokenException;
+import io.micrometer.core.instrument.util.StringUtils;
+
+
 @Service
 public class TokenSupplier {
 
@@ -23,7 +28,10 @@ public class TokenSupplier {
 			implements GetNewAccessToken, WithRefreshToken, WithUserDetails, GenerateNewTokens, Built {
 
 		private String accessToken;
+		
 		private String refreshToken;
+		private String oldAccessToken;
+		
 		private UserDetails userDetails;
 
 		private boolean provideNewRefreshToken = false;
@@ -37,8 +45,8 @@ public class TokenSupplier {
 				refreshToken = jwtUtils.generateRefreshToken(userDetails, accessToken);
 				
 			} 
-			else if (provideNewAccessToken) {
-				// OPERATION DELETE PREVIOUS ACCESS TOKEN HERE WITH REFRESH TOKEN
+			else if (provideNewAccessToken) {			
+				//jwtUtils.disableAccessToken(refreshToken, oldAccessToken);
 				accessToken = jwtUtils.generateAccessToken(userDetails);
 			}
 
@@ -47,14 +55,15 @@ public class TokenSupplier {
 		}
 
 		@Override
-		public WithRefreshToken getNewAccessToken() {
+		public WithRefreshToken getNewAccessToken(AccessToken oldAccessToken) {
 			this.provideNewAccessToken = true;
+			this.oldAccessToken = oldAccessToken.getRaw();
 			return this;
 		}
 
 		@Override
-		public WithUserDetails withRefreshToken(String refreshToken) {
-			this.refreshToken = refreshToken;
+		public WithUserDetails withRefreshToken(RefreshToken refreshToken) {
+			this.refreshToken = refreshToken.getRaw();
 			return this;
 		}
 
@@ -82,11 +91,11 @@ public class TokenSupplier {
 	}
 
 	public static interface GetNewAccessToken {
-		WithRefreshToken getNewAccessToken();
+		WithRefreshToken getNewAccessToken(AccessToken oldAccessToken);
 	}
 
 	public static interface WithRefreshToken {
-		WithUserDetails withRefreshToken(String refreshToken);
+		WithUserDetails withRefreshToken(RefreshToken refreshToken);
 	}
 
 	public static interface WithUserDetails {

@@ -18,7 +18,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.home4Me.Security.authentication.services.LoginDetailsService;
+import io.home4Me.Security.utils.AccessToken;
 import io.home4Me.Security.utils.JwtUtils;
+import io.home4Me.Security.utils.TokenType;
 
 public class JwtFilter extends OncePerRequestFilter  {
 
@@ -40,8 +42,10 @@ public class JwtFilter extends OncePerRequestFilter  {
 		
 		try {
             String jwt = parseJwt(request);
-            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                String username = jwtUtils.getUserNameFromAccessToken(jwt);
+            if (jwt != null) {
+            	
+            	AccessToken wrapToken = jwtUtils.wrapToken(jwt);
+                String username = wrapToken.getUsername();
                                
                 UserDetails userDetails = loginDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

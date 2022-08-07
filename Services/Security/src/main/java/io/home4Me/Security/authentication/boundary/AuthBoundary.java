@@ -21,6 +21,7 @@ import io.home4Me.Security.authentication.dto.LoginResponse;
 import io.home4Me.Security.authentication.dto.RegisterRequest;
 import io.home4Me.Security.authentication.services.JwtAuthenticationService;
 import io.home4Me.Security.authentication.services.LoginDetailsService;
+import io.home4Me.Security.utils.TokenWrappee;
 
 import static io.home4Me.Security.Access.ROLE_USER;
 
@@ -49,8 +50,8 @@ public class AuthBoundary {
 	
 	@PreAuthorize(ROLE_USER)
 	@GetMapping("/refreshAccessToken")
-	public ResponseEntity<LoginResponse> renewAccessToken(@NotBlank @RequestBody String refreshToken){
-		return ResponseEntity.ok(jwtService.refreshAuthenticatedAccessToken(refreshToken));
+	public ResponseEntity<LoginResponse> renewAccessToken(@NotBlank @RequestBody TokenWrappee tokens){
+		return ResponseEntity.ok(jwtService.refreshAuthenticatedAccessToken(tokens));
 	}
 	
 }

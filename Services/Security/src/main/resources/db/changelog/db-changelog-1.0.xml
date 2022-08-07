@@ -23,9 +23,7 @@
 			<column name="email" type="varchar(50)">
 				<constraints nullable="false" unique="true" />
 			</column>
-			<column name="creation_date" type="datetime">
-				<constraints nullable="false" />
-			</column>
+			<column name="creation_date" type="datetime" />
 			<column name="is_user_enabled" type="boolean">
 				<constraints nullable="false" />
 			</column>

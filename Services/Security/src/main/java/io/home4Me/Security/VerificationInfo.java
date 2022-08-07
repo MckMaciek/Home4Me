@@ -2,6 +2,7 @@ package io.home4Me.Security;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class VerificationInfo {
 	
@@ -32,4 +33,11 @@ public class VerificationInfo {
 				.filter(vInfo -> !vInfo.isVerified())
 				.findAny();
 	}
+	
+	public static boolean checkAndInCaseOfFailureRun(List<VerificationInfo> infos, Consumer<? super VerificationInfo> onFailAction) {
+		Optional<VerificationInfo> validationFailed = VerificationInfo.findAnyFailure(infos);
+		validationFailed.ifPresent(onFailAction);
+		return validationFailed.isEmpty();
+	}
+	
 }

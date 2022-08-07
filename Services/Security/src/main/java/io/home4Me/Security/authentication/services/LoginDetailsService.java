@@ -62,14 +62,13 @@ public class LoginDetailsService implements UserDetailsService {
 	}
 
 	private void saveEntity(LoginDetails loginDetails) {
+				
+		VerificationInfo.checkAndInCaseOfFailureRun(prePersistValidation(loginDetails), (loginDetailFailure -> {
+			throw new IllegalArgumentException(String.format("Cannot persist object - %s", loginDetailFailure.getReason()));
+		}));
 		
-		Optional<VerificationInfo> foundFailure = VerificationInfo.findAnyFailure(prePersistValidation(loginDetails));
-		
-		if (foundFailure.isEmpty()) {
-			encodePassword(loginDetails);
-			loginDetailsDao.save(loginDetails);
-		}
-		else throw new IllegalArgumentException(String.format("Cannot persist object - %s", foundFailure.get().getReason()));
+		encodePassword(loginDetails);
+		loginDetailsDao.save(loginDetails);		
 	}
 	
 	private Supplier<? extends UsernameNotFoundException> logAndThrowNotFoundExc(String username){
