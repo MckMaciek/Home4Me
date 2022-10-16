@@ -1,4 +1,4 @@
-package io.home4Me.Security.Entity;
+package io.home4Me.Security.entity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -8,16 +8,11 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.home4Me.Security.RoleTypes;
@@ -27,10 +22,8 @@ import io.home4Me.Security.authentication.entity.LoginDetails;
 import io.home4Me.Security.authentication.entity.UserRoles;
 import io.home4Me.Security.authentication.services.RoleService;
 
-@RunWith(SpringRunner.class)
+@SpringBootTest
 @ActiveProfiles("test")
-@AutoConfigureTestDatabase(replace=Replace.NONE)
-@DataJpaTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @Transactional
 public class UserDaoWithRolesDaoTest {
@@ -61,11 +54,6 @@ public class UserDaoWithRolesDaoTest {
 	private Set<RoleTypes> secondUserRoles = Set.of(RoleTypes.TENANT, RoleTypes.SUPERVISOR);
 	private RoleTypes secondUserOverridedRole = RoleTypes.ADMIN;
 	
-	@Before
-	public void setUp() {	
-		this.roleService = new RoleService(roleDao);
-	}
-	
 	public void setUpUsers() {
 		this.firstUser = LoginDetails.builder()
 				.id(null)
@@ -86,6 +74,8 @@ public class UserDaoWithRolesDaoTest {
 
 	@Test
 	public void testCrudOperationsUsersDaoWithRolesDao() {
+		
+		this.roleService = new RoleService(roleDao);
 		
 		//GIVEN
 		setUpUsers();

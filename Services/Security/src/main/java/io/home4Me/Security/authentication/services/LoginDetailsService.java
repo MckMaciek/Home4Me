@@ -19,10 +19,10 @@ import org.springframework.util.StringUtils;
 
 import io.home4Me.Security.DefaultRoles;
 import io.home4Me.Security.VerificationInfo;
-import io.home4Me.Security.Exceptions.UserAlreadyExistsException;
 import io.home4Me.Security.authentication.dao.LoginDetailsDao;
 import io.home4Me.Security.authentication.dto.RegisterRequest;
 import io.home4Me.Security.authentication.entity.LoginDetails;
+import io.home4Me.Security.exceptions.UserAlreadyExistsException;
 
 @Service
 public class LoginDetailsService implements UserDetailsService {

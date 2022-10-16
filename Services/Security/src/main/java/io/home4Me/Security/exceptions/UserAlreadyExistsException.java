@@ -1,4 +1,4 @@
-package io.home4Me.Security.Exceptions;
+package io.home4Me.Security.exceptions;
 
 @SuppressWarnings("serial")
 public class UserAlreadyExistsException extends RuntimeException {

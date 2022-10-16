@@ -1,4 +1,5 @@
-package io.home4Me.Security.Events.Listeners;
+package io.home4Me.Security.authentication.events.listeners;
+
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,8 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-import io.home4Me.Security.Events.LogUserCreatedEvent;
-import io.home4Me.Security.authentication.dto.LoginDetailsDto;
+import io.home4Me.Security.authentication.events.LogUserCreatedEvent;
 
 @Component
 public class LogUserCreatedEventListener implements ApplicationListener<LogUserCreatedEvent> {

@@ -1,4 +1,5 @@
-package io.home4Me.Security.Events;
+package io.home4Me.Security.authentication.events;
+
 
 import org.springframework.context.ApplicationEvent;
 

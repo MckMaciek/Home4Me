@@ -18,13 +18,13 @@ import org.springframework.stereotype.Service;
 
 import io.home4Me.Security.RoleTypes;
 import io.home4Me.Security.VerificationInfo;
-import io.home4Me.Security.Exceptions.ExpiredTokenException;
-import io.home4Me.Security.Exceptions.InvalidTokenException;
 import io.home4Me.Security.authentication.AuthenticationToken;
 import io.home4Me.Security.authentication.dto.LoginRequest;
 import io.home4Me.Security.authentication.dto.LoginResponse;
 import io.home4Me.Security.authentication.entity.LoginDetails;
 import io.home4Me.Security.authentication.entity.UserRoles;
+import io.home4Me.Security.exceptions.ExpiredTokenException;
+import io.home4Me.Security.exceptions.InvalidTokenException;
 import io.home4Me.Security.utils.AccessToken;
 import io.home4Me.Security.utils.JwtUtils;
 import io.home4Me.Security.utils.RefreshToken;

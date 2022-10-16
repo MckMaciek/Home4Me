@@ -1,4 +1,4 @@
-package io.home4Me.Security.Token;
+package io.home4Me.Security.token;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -7,13 +7,15 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -26,6 +28,8 @@ import io.home4Me.Security.utils.TokenSupplier;
 import io.home4Me.Security.utils.TokenWrappee;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
+@ActiveProfiles("test")
 public class TokenSupplierTest {
 	
 	public static final String USERNAME = "ANY_USERNAME";
@@ -72,9 +76,9 @@ public class TokenSupplierTest {
 
 	
 	private void setUp() {	
-		ReflectionTestUtils.setField(this.jwtUtils, "jwtSecret", JWT_SECRET);
-		ReflectionTestUtils.setField(this.jwtUtils, "refreshTokenExpirationTime", 3600l);
-		ReflectionTestUtils.setField(this.jwtUtils, "accessTokenExpirationTime", 3600l);
+		ReflectionTestUtils.setField(this.jwtUtils, "jwt.secret", JWT_SECRET);
+		ReflectionTestUtils.setField(this.jwtUtils, "jwt.refreshTokenExpirationTime", 3600l);
+		ReflectionTestUtils.setField(this.jwtUtils, "jwt.accessTokenExpirationTime", 3600l);
 	}
 
 

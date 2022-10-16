@@ -5,8 +5,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import io.home4Me.Security.Exceptions.InvalidAccessTokenException;
-import io.home4Me.Security.Exceptions.InvalidRefreshTokenException;
+import io.home4Me.Security.exceptions.InvalidAccessTokenException;
+import io.home4Me.Security.exceptions.InvalidRefreshTokenException;
 import io.micrometer.core.instrument.util.StringUtils;
 
 
