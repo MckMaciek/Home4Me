@@ -19,9 +19,9 @@ import io.home4Me.Security.RoleTypes;
 import io.home4Me.Security.authentication.dto.LoginRequest;
 import io.home4Me.Security.authentication.dto.LoginResponse;
 import io.home4Me.Security.authentication.dto.RegisterRequest;
-import io.home4Me.Security.authentication.services.JwtAuthenticationService;
-import io.home4Me.Security.authentication.services.LoginDetailsService;
-import io.home4Me.Security.utils.TokenWrappee;
+import io.home4Me.Security.authentication.identity.user.LoginDetailsService;
+import io.home4Me.Security.authentication.token.dto.TokenWrappee;
+import io.home4Me.Security.authentication.token.service.JwtAuthenticationService;
 
 import static io.home4Me.Security.Access.ROLE_USER;
 

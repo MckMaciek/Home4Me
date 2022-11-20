@@ -21,11 +21,11 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import io.home4Me.Security.RoleTypes;
 import io.home4Me.Security.VerificationInfo;
-import io.home4Me.Security.utils.AccessToken;
-import io.home4Me.Security.utils.JwtUtils;
-import io.home4Me.Security.utils.RefreshToken;
-import io.home4Me.Security.utils.TokenSupplier;
-import io.home4Me.Security.utils.TokenWrappee;
+import io.home4Me.Security.authentication.token.dto.TokenWrappee;
+import io.home4Me.Security.authentication.token.dto.access.AccessToken;
+import io.home4Me.Security.authentication.token.dto.refresh.RefreshToken;
+import io.home4Me.Security.authentication.token.service.JwtUtils;
+import io.home4Me.Security.authentication.token.service.TokenSupplier;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest

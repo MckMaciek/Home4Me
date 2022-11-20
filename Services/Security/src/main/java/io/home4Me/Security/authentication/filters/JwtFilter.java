@@ -17,10 +17,10 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import io.home4Me.Security.authentication.services.LoginDetailsService;
-import io.home4Me.Security.utils.AccessToken;
-import io.home4Me.Security.utils.JwtUtils;
-import io.home4Me.Security.utils.TokenType;
+import io.home4Me.Security.authentication.identity.user.LoginDetailsService;
+import io.home4Me.Security.authentication.token.TokenType;
+import io.home4Me.Security.authentication.token.dto.access.AccessToken;
+import io.home4Me.Security.authentication.token.service.JwtUtils;
 
 public class JwtFilter extends OncePerRequestFilter  {
 

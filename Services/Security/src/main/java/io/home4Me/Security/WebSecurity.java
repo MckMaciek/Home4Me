@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import io.home4Me.Security.authentication.filters.JwtFilter;
-import io.home4Me.Security.authentication.services.LoginDetailsService;
+import io.home4Me.Security.authentication.identity.user.LoginDetailsService;
 
 @Component
 public class WebSecurity extends WebSecurityConfigurerAdapter  {

@@ -8,8 +8,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import io.home4Me.Security.authentication.dto.RegisterRequest;
-import io.home4Me.Security.authentication.entity.LoginDetails;
-import io.home4Me.Security.authentication.services.LoginDetailsService;
+import io.home4Me.Security.authentication.identity.user.LoginDetailsService;
 
 @Component
 @Profile("bootstrap")
@@ -21,8 +20,7 @@ public class BootstrapInit implements CommandLineRunner {
 	@Override
 	@Transactional
 	public void run(String... args) throws Exception {
-
-		LoginDetails anyUser = loginDetailsService
+		loginDetailsService
 				.createUser(
 						RegisterRequest.builder().email("test@gmail.com").username("anyUsername")
 								.password("anyPassword").build()

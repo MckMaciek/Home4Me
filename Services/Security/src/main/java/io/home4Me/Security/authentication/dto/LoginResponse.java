@@ -3,8 +3,7 @@ package io.home4Me.Security.authentication.dto;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import io.home4Me.Security.RoleTypes;
-import io.home4Me.Security.utils.TokenWrappee;
+import io.home4Me.Security.authentication.token.dto.TokenWrappee;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,7 +13,7 @@ public class LoginResponse {
 
 	private String username;
 	private String email;
-	private Set<RoleTypes> roles;
+	private Set<String> roles;
 	private TokenWrappee tokens;
 	private LocalDateTime processedDate;
 }
